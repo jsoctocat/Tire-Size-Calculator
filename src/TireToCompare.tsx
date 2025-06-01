@@ -11,7 +11,7 @@ import { useMemo } from "react";
 
 interface Props {
   onSelectWheelDiameter: (WheelDiameter: number) => void;
-  onSelectTireHeight: (tireHeight: number) => void;
+  onSelectAspectRatio: (aspectRatio: number) => void;
   onSelectTireWidth: (tireWidth: number) => void;
   setOffset: (wheelOffset: number) => void;
   setWheelWidth: (wheelWidth: number) => void;
@@ -19,7 +19,7 @@ interface Props {
 
 const ComboBox = ({
   onSelectWheelDiameter,
-  onSelectTireHeight,
+  onSelectAspectRatio,
   onSelectTireWidth,
   setOffset,
   setWheelWidth,
@@ -89,13 +89,13 @@ const ComboBox = ({
           collection={tireHeightCollection}
           size="sm"
           width="500px"
-          onValueChange={(e) => onSelectTireHeight(Number(e.value))}
+          onValueChange={(e) => onSelectAspectRatio(Number(e.value))}
         >
           <Select.HiddenSelect />
-          <Select.Label>Height</Select.Label>
+          <Select.Label>Aspect Ratio</Select.Label>
           <Select.Control>
             <Select.Trigger>
-              <Select.ValueText placeholder="Height" />
+              <Select.ValueText placeholder="Aspect Ratio" />
             </Select.Trigger>
             <Select.IndicatorGroup>
               <Select.Indicator />
@@ -144,7 +144,7 @@ const ComboBox = ({
           </Portal>
         </Select.Root>
         <Field.Root orientation="vertical">
-          <Field.Label>OFFSET</Field.Label>
+          <Field.Label>Offset</Field.Label>
           <NumberInput.Root onValueChange={(e) => setOffset(Number(e.value))}>
             <NumberInput.Input></NumberInput.Input>
           </NumberInput.Root>

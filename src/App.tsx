@@ -1,51 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ComboBox from "./TireToCompare";
 import { Heading, Button, Stack } from "@chakra-ui/react";
 
 export interface Wheel {
   width: number;
-  height: number;
+  aspectRatio: number;
   diameter: number;
-  offset: number;
   wheelWidth: number;
   sidewall: number;
-  rim: number;
   rimDiameter: number;
-  tireDiameter: number;
+  wheelDiameter: number;
   circumference: number;
   revolutionPerKm: number;
+  offset: number;
 }
 
 function CalcDifference(currentWheel: Wheel, newWheel: Wheel) {
-  //sidewall height
-  currentWheel.sidewall = currentWheel.width * (currentWheel.offset / 100);
-  newWheel.sidewall = newWheel.width * (newWheel.offset / 100);
-
   // rim diameter
   // convert rim in inches to millimeter
-  currentWheel.rimDiameter = currentWheel.rim * 25.4;
-  newWheel.rimDiameter = newWheel.rim * 25.4;
+  currentWheel.rimDiameter = currentWheel.diameter * 25.4;
+  newWheel.rimDiameter = newWheel.diameter * 25.4;
+
+  //sidewall height
+  currentWheel.sidewall = currentWheel.width * (currentWheel.aspectRatio / 100);
+  newWheel.sidewall = newWheel.width * (newWheel.aspectRatio / 100);
 
   // tire diameter
-  currentWheel.tireDiameter = currentWheel.rim + 2 * currentWheel.sidewall;
-  newWheel.tireDiameter = newWheel.rim + 2 * newWheel.sidewall;
+  currentWheel.wheelDiameter =
+    currentWheel.rimDiameter + 2 * currentWheel.sidewall;
+  newWheel.wheelDiameter = newWheel.rimDiameter + 2 * newWheel.sidewall;
 
   // circumference
-  currentWheel.circumference = 3.1415926 * currentWheel.diameter;
-  newWheel.circumference = 3.1415926 * newWheel.diameter;
+  currentWheel.circumference = Math.PI * currentWheel.wheelDiameter;
+  newWheel.circumference = Math.PI * newWheel.wheelDiameter;
 
   // revolution per km
   // there are 1,000,000 mm in a kilmeter
   currentWheel.revolutionPerKm = 1000000 / currentWheel.circumference;
   newWheel.revolutionPerKm = 1000000 / newWheel.circumference;
-
-  console.log(currentWheel);
-  console.log(newWheel);
 }
 
 function App() {
   const [currentTireQuery, setCurrentTireQuery] = useState<Wheel>({} as Wheel);
   const [newTireQuery, setNewTireQuery] = useState<Wheel>({} as Wheel);
+
+  useEffect(() => {
+    console.log("current", currentTireQuery);
+    console.log("new", newTireQuery);
+  }, [currentTireQuery, newTireQuery]);
 
   return (
     <>
@@ -54,8 +56,8 @@ function App() {
           onSelectWheelDiameter={(diameter) =>
             setCurrentTireQuery({ ...currentTireQuery, diameter })
           }
-          onSelectTireHeight={(height) =>
-            setCurrentTireQuery({ ...currentTireQuery, height })
+          onSelectAspectRatio={(aspectRatio) =>
+            setCurrentTireQuery({ ...currentTireQuery, aspectRatio })
           }
           onSelectTireWidth={(width) =>
             setCurrentTireQuery({ ...currentTireQuery, width })
@@ -71,17 +73,15 @@ function App() {
           onSelectWheelDiameter={(diameter) =>
             setNewTireQuery({ ...newTireQuery, diameter })
           }
-          onSelectTireHeight={(height) =>
-            setNewTireQuery({ ...newTireQuery, height })
+          onSelectAspectRatio={(aspectRatio) =>
+            setNewTireQuery({ ...newTireQuery, aspectRatio })
           }
           onSelectTireWidth={(width) =>
             setNewTireQuery({ ...newTireQuery, width })
           }
-          setOffset={(offset) =>
-            setCurrentTireQuery({ ...newTireQuery, offset })
-          }
+          setOffset={(offset) => setNewTireQuery({ ...newTireQuery, offset })}
           setWheelWidth={(wheelWidth) =>
-            setCurrentTireQuery({ ...newTireQuery, wheelWidth })
+            setNewTireQuery({ ...newTireQuery, wheelWidth })
           }
         ></ComboBox>
         <Button
@@ -100,7 +100,7 @@ function App() {
           RimDiameter: {currentTireQuery.rimDiameter}
         </Heading>
         <Heading fontSize="2xl" marginBottom={3}>
-          TireDiameter: {currentTireQuery.tireDiameter}
+          WheelDiameter: {currentTireQuery.wheelDiameter}
         </Heading>
         <Heading fontSize="2xl" marginBottom={3}>
           Circumference: {currentTireQuery.circumference}
