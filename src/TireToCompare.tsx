@@ -10,13 +10,11 @@ import wheelData from "./wheelData";
 import { useMemo } from "react";
 
 interface Props {
-  onSelectWheelDiameter: (WheelDiameter: string[]) => void;
-  onSelectTireHeight: (tireHeight: string[]) => void;
-  onSelectTireWidth: (tireWidth: string[]) => void;
-  setOffset: (wheelOffset: string) => void;
-  setWheelWidth: (wheelWidth: string) => void;
-  offsetValue: string;
-  wheelWidthValue: string;
+  onSelectWheelDiameter: (WheelDiameter: number) => void;
+  onSelectTireHeight: (tireHeight: number) => void;
+  onSelectTireWidth: (tireWidth: number) => void;
+  setOffset: (wheelOffset: number) => void;
+  setWheelWidth: (wheelWidth: number) => void;
 }
 
 const ComboBox = ({
@@ -24,9 +22,7 @@ const ComboBox = ({
   onSelectTireHeight,
   onSelectTireWidth,
   setOffset,
-  offsetValue,
   setWheelWidth,
-  wheelWidthValue,
 }: Props) => {
   const { diameter, height, width } = wheelData();
 
@@ -61,7 +57,7 @@ const ComboBox = ({
           collection={wheelDiameterCollection}
           size="sm"
           width="500px"
-          onValueChange={(e) => onSelectWheelDiameter(e.value)}
+          onValueChange={(e) => onSelectWheelDiameter(Number(e.value))}
         >
           <Select.HiddenSelect />
           <Select.Label>Diameter</Select.Label>
@@ -93,7 +89,7 @@ const ComboBox = ({
           collection={tireHeightCollection}
           size="sm"
           width="500px"
-          onValueChange={(e) => onSelectTireHeight(e.value)}
+          onValueChange={(e) => onSelectTireHeight(Number(e.value))}
         >
           <Select.HiddenSelect />
           <Select.Label>Height</Select.Label>
@@ -122,7 +118,7 @@ const ComboBox = ({
           collection={tireWidthCollection}
           size="sm"
           width="500px"
-          onValueChange={(e) => onSelectTireWidth(e.value)}
+          onValueChange={(e) => onSelectTireWidth(Number(e.value))}
         >
           <Select.HiddenSelect />
           <Select.Label>Width</Select.Label>
@@ -149,18 +145,14 @@ const ComboBox = ({
         </Select.Root>
         <Field.Root orientation="vertical">
           <Field.Label>OFFSET</Field.Label>
-          <NumberInput.Root
-            value={offsetValue}
-            onValueChange={(e) => setOffset(e.value)}
-          >
+          <NumberInput.Root onValueChange={(e) => setOffset(Number(e.value))}>
             <NumberInput.Input></NumberInput.Input>
           </NumberInput.Root>
         </Field.Root>
         <Field.Root orientation="vertical">
           <Field.Label>Wheel Width</Field.Label>
           <NumberInput.Root
-            value={wheelWidthValue}
-            onValueChange={(e) => setWheelWidth(e.value)}
+            onValueChange={(e) => setWheelWidth(Number(e.value))}
           >
             <NumberInput.Input></NumberInput.Input>
           </NumberInput.Root>
