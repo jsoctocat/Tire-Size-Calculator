@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ComboBox from "./TireToCompare";
-import { Heading, Button, Stack } from "@chakra-ui/react";
+import { Stack, HStack } from "@chakra-ui/react";
 
 export interface Wheel {
   width: number;
@@ -15,38 +15,36 @@ export interface Wheel {
   offset: number;
 }
 
-function CalcDifference(currentWheel: Wheel, newWheel: Wheel) {
-  // rim diameter
-  // convert rim in inches to millimeter
-  currentWheel.rimDiameter = currentWheel.diameter * 25.4;
-  newWheel.rimDiameter = newWheel.diameter * 25.4;
-
-  //sidewall height
-  currentWheel.sidewall = currentWheel.width * (currentWheel.aspectRatio / 100);
-  newWheel.sidewall = newWheel.width * (newWheel.aspectRatio / 100);
-
-  // tire diameter
-  currentWheel.wheelDiameter =
-    currentWheel.rimDiameter + 2 * currentWheel.sidewall;
-  newWheel.wheelDiameter = newWheel.rimDiameter + 2 * newWheel.sidewall;
-
-  // circumference
-  currentWheel.circumference = Math.PI * currentWheel.wheelDiameter;
-  newWheel.circumference = Math.PI * newWheel.wheelDiameter;
-
-  // revolution per km
-  // there are 1,000,000 mm in a kilmeter
-  currentWheel.revolutionPerKm = 1000000 / currentWheel.circumference;
-  newWheel.revolutionPerKm = 1000000 / newWheel.circumference;
-}
-
 function App() {
   const [currentTireQuery, setCurrentTireQuery] = useState<Wheel>({} as Wheel);
   const [newTireQuery, setNewTireQuery] = useState<Wheel>({} as Wheel);
 
   useEffect(() => {
-    console.log("current", currentTireQuery);
-    console.log("new", newTireQuery);
+    // rim diameter
+    // convert rim in inches to millimeter
+    currentTireQuery.rimDiameter = currentTireQuery.diameter * 25.4;
+    newTireQuery.rimDiameter = newTireQuery.diameter * 25.4;
+
+    //sidewall height
+    currentTireQuery.sidewall =
+      currentTireQuery.width * (currentTireQuery.aspectRatio / 100);
+    newTireQuery.sidewall =
+      newTireQuery.width * (newTireQuery.aspectRatio / 100);
+
+    // tire diameter
+    currentTireQuery.wheelDiameter =
+      currentTireQuery.rimDiameter + 2 * currentTireQuery.sidewall;
+    newTireQuery.wheelDiameter =
+      newTireQuery.rimDiameter + 2 * newTireQuery.sidewall;
+
+    // circumference
+    currentTireQuery.circumference = Math.PI * currentTireQuery.wheelDiameter;
+    newTireQuery.circumference = Math.PI * newTireQuery.wheelDiameter;
+
+    // revolution per km
+    // there are 1,000,000 mm in a kilmeter
+    currentTireQuery.revolutionPerKm = 1000000 / currentTireQuery.circumference;
+    newTireQuery.revolutionPerKm = 1000000 / newTireQuery.circumference;
   }, [currentTireQuery, newTireQuery]);
 
   return (
@@ -84,30 +82,26 @@ function App() {
             setNewTireQuery({ ...newTireQuery, wheelWidth })
           }
         ></ComboBox>
-        <Button
-          bg="bg.subtle"
-          variant="outline"
-          width="1/2"
-          onClick={() => CalcDifference(currentTireQuery, newTireQuery)}
-        >
-          Submit
-        </Button>
 
-        <Heading fontSize="2xl" marginBottom={3}>
-          Sidewall: {currentTireQuery.sidewall}
-        </Heading>
-        <Heading fontSize="2xl" marginBottom={3}>
-          RimDiameter: {currentTireQuery.rimDiameter}
-        </Heading>
-        <Heading fontSize="2xl" marginBottom={3}>
-          WheelDiameter: {currentTireQuery.wheelDiameter}
-        </Heading>
-        <Heading fontSize="2xl" marginBottom={3}>
-          Circumference: {currentTireQuery.circumference}
-        </Heading>
-        <Heading fontSize="2xl" marginBottom={3}>
-          RevolutionPerKm: {currentTireQuery.revolutionPerKm}
-        </Heading>
+        <HStack>
+          <Stack>
+            <div> EXISTING </div>
+            <div> Sidewall: {currentTireQuery.sidewall} </div>
+            <div> RimDiameter: {currentTireQuery.rimDiameter} </div>
+            <div> WheelDiameter: {currentTireQuery.wheelDiameter} </div>
+            <div> Circumference: {currentTireQuery.circumference} </div>
+            <div> RevolutionPerKm: {currentTireQuery.revolutionPerKm} </div>
+          </Stack>
+
+          <Stack>
+            <div> NEW </div>
+            <div> Sidewall: {newTireQuery.sidewall} </div>
+            <div> RimDiameter: {newTireQuery.rimDiameter} </div>
+            <div> WheelDiameter: {newTireQuery.wheelDiameter} </div>
+            <div> Circumference: {newTireQuery.circumference} </div>
+            <div> RevolutionPerKm: {newTireQuery.revolutionPerKm} </div>
+          </Stack>
+        </HStack>
       </Stack>
     </>
   );
